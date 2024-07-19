@@ -1,0 +1,24 @@
+void countFrequencies(int *arr, int n, int *countArr) {
+    for (int i = 0; i < n; i++) {
+        countArr[arr[i]]++;
+    }
+}
+
+int numRabbits(int* answers, int answersSize) {
+    int countArr[1001] = {0};
+    countFrequencies(answers, answersSize, countArr);
+
+    int rabbits = 0;
+
+    for (int i = 0; i < 1001; i++) {
+        if (countArr[i] > 0) {
+            int groupSize = i + 1;
+            int numGroups = (countArr[i] + groupSize - 1) / groupSize;
+            rabbits += numGroups * groupSize;
+        }
+    }
+    return rabbits;
+}
+
+
+
