@@ -1,0 +1,66 @@
+#define SIZE 9
+
+bool isValidRow(char** board, int row, char num) {
+    for (int col = 0; col < SIZE; col++) {
+        if (board[row][col] == num) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool isValidColumn(char** board, int col, char num) {
+    for (int row = 0; row < SIZE; row++) {
+        if (board[row][col] == num) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool isValidBox(char** board, int startRow, int startCol, char num) {
+    for (int row = 0; row < 3; row++) {
+        for (int col = 0; col < 3; col++) {
+            if (board[startRow + row][startCol + col] == num) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool isValid(char** board, int row, int col, char num) {
+    return isValidRow(board, row, num) &&
+           isValidColumn(board, col, num) &&
+           isValidBox(board, row - row % 3, col - col % 3, num);
+}
+
+bool solveSudokuHelper(char** board, int row, int col) {
+    if (row == SIZE) {
+        return true; // Entire board solved
+    }
+    
+    if (col == SIZE) {
+        return solveSudokuHelper(board, row + 1, 0);
+    }
+    
+    if (board[row][col] != '.') {
+        return solveSudokuHelper(board, row, col + 1); 
+    }
+    
+    for (char num = '1'; num <= '9'; num++) {
+        if (isValid(board, row, col, num)) {
+            board[row][col] = num;
+            if (solveSudokuHelper(board, row, col + 1)) {
+                return true;
+            }
+            board[row][col] = '.'; 
+        }
+    }
+    
+    return false; 
+}
+
+void solveSudoku(char** board, int boardSize, int* boardColSize){
+    solveSudokuHelper(board, 0, 0);
+}
