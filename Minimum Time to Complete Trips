@@ -1,0 +1,28 @@
+int canCompleteTrips(int* time, int timeSize, int totalTrips, long long T) {
+    long long trips = 0;
+    for (int i = 0; i < timeSize; i++) {
+        trips += T / time[i];
+        if (trips >= totalTrips) {
+            return 1;
+        }
+    }
+    return 0; 
+}
+
+long long minimumTime(int* time, int timeSize, int totalTrips) {
+    long long left = 1, right = LLONG_MAX;
+    long long result = LLONG_MAX;
+
+    while (left <= right) {
+        long long mid = left + (right - left) / 2;
+        if (canCompleteTrips(time, timeSize, totalTrips, mid)) {
+            result = mid;
+            right = mid - 1;
+        } else {
+            left = mid + 1;
+        }
+    }
+
+    return result;
+}
+
