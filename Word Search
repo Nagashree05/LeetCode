@@ -1,0 +1,54 @@
+bool dfs(char** board, int boardSize, int* boardColSize, char* word, int idx, int r, int c, bool** visited) {
+    if (idx == strlen(word)) {
+        return true;
+    }
+    if (r < 0 || r >= boardSize || c < 0 || c >= boardColSize[r] || visited[r][c] || board[r][c] != word[idx]) {
+        return false;
+    }
+    
+    visited[r][c] = true;
+    
+    bool found = dfs(board, boardSize, boardColSize, word, idx + 1, r - 1, c, visited) || 
+                 dfs(board, boardSize, boardColSize, word, idx + 1, r + 1, c, visited) || 
+                 dfs(board, boardSize, boardColSize, word, idx + 1, r, c - 1, visited) || 
+                 dfs(board, boardSize, boardColSize, word, idx + 1, r, c + 1, visited);   
+    
+    visited[r][c] = false;
+    
+    return found;
+}
+
+bool exist(char** board, int boardSize, int* boardColSize, char* word) {
+    if (board == NULL || boardSize == 0 || boardColSize == NULL || word == NULL) {
+        return false;
+    }
+    
+    int m = boardSize;
+    int n = boardColSize[0]; 
+    
+    bool** visited = (bool**)malloc(m * sizeof(bool*));
+    for (int i = 0; i < m; ++i) {
+        visited[i] = (bool*)calloc(n, sizeof(bool));
+    }
+   
+    for (int r = 0; r < m; ++r) {
+        for (int c = 0; c < n; ++c) {
+            if (dfs(board, m, boardColSize, word, 0, r, c, visited)) {
+                // Found the word starting from (r, c)
+                for (int i = 0; i < m; ++i) {
+                    free(visited[i]);
+                }
+                free(visited);
+                return true;
+            }
+        }
+    }
+
+    for (int i = 0; i < m; ++i) {
+        free(visited[i]);
+    }
+    free(visited);
+    
+    return false;
+}
+
