@@ -1,0 +1,32 @@
+int compare(const void *a, const void *b) {
+    char ab[22]; 
+    char ba[22];
+    sprintf(ab, "%d%d", *(int*)a, *(int*)b);
+    sprintf(ba, "%d%d", *(int*)b, *(int*)a);
+    return strcmp(ba, ab);
+}
+
+char* largestNumber(int* nums, int numsSize) {
+    if (numsSize == 0) {
+        char *result = (char *)malloc(2 * sizeof(char));
+        strcpy(result, "0");
+        return result;
+    }
+    qsort(nums, numsSize, sizeof(int), compare);
+    
+    char *result = (char *)malloc(22 * numsSize * sizeof(char)); 
+    result[0] = '\0';
+   
+    for (int i = 0; i < numsSize; ++i) {
+        char numStr[12]; 
+        sprintf(numStr, "%d", nums[i]);
+        strcat(result, numStr);
+    }
+   
+    if (result[0] == '0') {
+        result[1] = '\0'; 
+    } 
+    return result;
+}
+
+
