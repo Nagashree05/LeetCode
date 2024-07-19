@@ -1,0 +1,30 @@
+int max(int a, int b) {
+    return (a > b) ? a : b;
+}
+
+int robHelper(int* nums, int n, int* memo) {
+    if (n < 0) {
+        return 0;
+    }
+
+    if (memo[n] != -1) {
+        return memo[n];
+    }
+    int robNext = robHelper(nums, n - 1, memo);
+    int robCurrent = nums[n] + robHelper(nums, n - 2, memo);
+    memo[n] = max(robNext, robCurrent);
+    
+    return memo[n];
+}
+
+int rob(int* nums, int numsSize) {
+    int* memo = (int*)malloc(numsSize * sizeof(int));
+    for (int i = 0; i < numsSize; i++) {
+        memo[i] = -1;
+    }
+    int result = robHelper(nums, numsSize - 1, memo);
+    free(memo);
+    
+    return result;
+}
+
